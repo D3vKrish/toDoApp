@@ -10,7 +10,6 @@ const taskSchema = new mongoose.Schema({
     userId: {
         type: String,
         required: true,
-        unique: true,
         trim: true
     },
     title: {
@@ -28,12 +27,12 @@ const taskSchema = new mongoose.Schema({
         default: false
     },
     createdAt: {
-        type: String, 
-        default: formatDate
+        type: Date, 
+        default: Date.now
     },
     ddate: {
-        type: String,
-        default: formatDate
+        type: Date,
+        default: Date.now
     }
 })
 

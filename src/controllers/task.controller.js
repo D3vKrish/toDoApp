@@ -1,11 +1,4 @@
 const { Task } = require("../models/Task");
-const formatDate = () => {
-  const now = new Date();
-  const dd = String(now.getDate()).padStart(2, '0');
-  const mm = String(now.getMonth() + 1).padStart(2, '0');
-  const yyyy = now.getFullYear();
-  return `${dd}-${mm}-${yyyy}`;
-};
 const createTask = async (req, res) => {
   try {
     const { title, description, ddate } = req.body;
@@ -14,7 +7,7 @@ const createTask = async (req, res) => {
       userId: userId, 
       title: title || '', 
       description: description || '',
-      ddate: ddate || formatDate(),
+      ddate: ddate || Date.now(),
       });
       await newTask.save();
     return res.status(201).json(newTask);
@@ -26,7 +19,7 @@ const createTask = async (req, res) => {
 const getTasks = async (req, res) => {
   try {
     const userId = req.body.userId;
-    const tasks = await Task.find({ userId }).sort({ createdAt: -1 });
+    const tasks = await Task.find({ userId });
     return res.status(200).json(tasks);
   } catch (err) {
     return res.status(500).json({ error: 'Failed to fetch tasks', details: err.message });
