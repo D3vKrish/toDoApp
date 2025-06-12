@@ -29,7 +29,6 @@ const registerController = async (req, res) => {
         // WHY: Provides clear feedback when attempting to create duplicate accounts
         // WHY: Stops the registration process early if userId is already taken
         if(existingUser){
-            console.log("User already exists with the");
             return res.status(400).json({
                 status: 400,
                 message: "User already exists with same username",

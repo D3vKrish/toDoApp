@@ -5,10 +5,9 @@ const createTask = async (req, res) => {
     const userId = req.body.userId; 
     const existingTask = await Task.findOne({ title: title, userId: userId });
     if(existingTask){
-            console.log("Task already exists with the name");
             return res.status(400).json({
                 status: 400,
-                message: "Task already exists with the name",
+                message: "Task already exists",
                 data: [],
                 error: "Task already exists"
             });
@@ -29,8 +28,7 @@ const createTask = async (req, res) => {
 const getTasks = async (req, res) => {
   try {
     const userId = req.query.userId;
-    const tasks = await Task.find({userId: userId}).sort({ createdAt: -1 });
-    console.log("Route hit");
+    const tasks = await Task.find({userId: userId}).sort({ createdAt: 1 });
     if (!tasks || tasks.length === 0) {
       return res.status(404).json({ error: 'No tasks found for this user' });
     }
