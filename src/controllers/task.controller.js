@@ -18,9 +18,15 @@ const createTask = async (req, res) => {
 
 const getTasks = async (req, res) => {
   try {
-    const userId = req.body.userId;
-    const tasks = await Task.find({ userId });
-    return res.status(200).json(tasks);
+    const userId = req.query.userId;
+    const tasks = await Task.find({userId: userId}).sort({ createdAt: -1 });
+    console.log("Route hit");
+    if (!tasks || tasks.length === 0) {
+      return res.status(404).json({ error: 'No tasks found for this user' });
+    }
+    else
+      return res.status(200).json(tasks);
+    
   } catch (err) {
     return res.status(500).json({ error: 'Failed to fetch tasks', details: err.message });
   }
