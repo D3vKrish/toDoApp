@@ -6,8 +6,9 @@ const createTask = async (req, res) => {
 
     const newTask = new Task({
       userId: userId, 
-      title: title,
+      title: title || '', 
       description: description || '',});
+      await newTask.save();
     return res.status(201).json(newTask);
   } catch (err) {
     return res.status(500).json({ error: 'Failed to create task', details: err.message });
@@ -26,11 +27,11 @@ const getTasks = async (req, res) => {
 
 const updateTask = async (req, res) => {
   try {
-    const { taskId, title, description, status } = req.body;
-
+    const { task, title, description, status } = req.body;
+    const taskId = task._id;
     const updatedTask = await Task.findByIdAndUpdate(
       taskId,
-      { title, description, status },
+      { title, description, status},
       { new: true }
     );
 
