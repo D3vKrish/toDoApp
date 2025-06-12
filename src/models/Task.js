@@ -1,4 +1,11 @@
 const { default: mongoose, mongo } = require("mongoose");
+const formatDate = () => {
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2, '0');
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const yyyy = now.getFullYear();
+  return `${dd}-${mm}-${yyyy}`;
+};
 const taskSchema = new mongoose.Schema({
     userId: {
         type: String,
@@ -21,8 +28,12 @@ const taskSchema = new mongoose.Schema({
         default: false
     },
     createdAt: {
-        type: Date,
-        default: Date.now
+        type: String, 
+        default: formatDate
+    },
+    ddate: {
+        type: String,
+        default: formatDate
     }
 })
 
