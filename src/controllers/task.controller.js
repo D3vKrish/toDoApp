@@ -3,6 +3,16 @@ const createTask = async (req, res) => {
   try {
     const { title, description, ddate } = req.body;
     const userId = req.body.userId; 
+    const existingTask = await Task.findOne({ title: title, userId: userId });
+    if(existingTask){
+            console.log("Task already exists with the name");
+            return res.status(400).json({
+                status: 400,
+                message: "Task already exists with the name",
+                data: [],
+                error: "Task already exists"
+            });
+        }
     const newTask = new Task({
       userId: userId, 
       title: title || '', 
