@@ -69,8 +69,8 @@ const loginController = async (req, res) => {
                 userId: existingUser.userId,
                 id: existingUser._id 
             },
-            process.env.JWT_SECRET || 'your-secret-key', // Should use environment variable
-            { expiresIn: '2d' } // Token expires in 2 days
+            process.env.JWT_SECRET || 'secretKey', // Should use environment variable
+            { expiresIn: '8h' } // Token expires in 8 hours
         );
     
         // Successful authentication response with JWT token
