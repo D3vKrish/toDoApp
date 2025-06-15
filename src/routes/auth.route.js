@@ -4,6 +4,7 @@
 // Import authentication controllers
 const { loginController } = require('../controllers/login.controller');
 const { registerController } = require('../controllers/register.controller');
+const { passwordResetController } = require('../controllers/passwordReset.controller');
 
 // Initialize router for authentication endpoints
 const AuthRouter = require('express').Router();
@@ -16,6 +17,9 @@ AuthRouter.post('/login', loginController);
 
 // Registration - Creates new user accounts
 AuthRouter.post('/register', registerController);
+
+// Password Reset - Allows users to reset their passwords
+AuthRouter.post('/reset', passwordResetController);
 
 
 // Export router for use in main application
