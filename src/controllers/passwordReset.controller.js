@@ -31,7 +31,7 @@ const passwordResetController = async (req, res) => {
             // Update user password
             existingUser.password = hashedNewPassword;
             // Save updated user record
-            const updatedUser = await User.findByIdAndUpdate(
+            await User.findByIdAndUpdate(
                   userId,
                   { password: hashedNewPassword },
                   { new: true }
