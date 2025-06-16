@@ -19,7 +19,7 @@ AuthRouter.post('/login', loginController);
 AuthRouter.post('/register', registerController);
 
 // Password Reset - Allows users to reset their passwords
-AuthRouter.post('/reset', passwordResetController);
+AuthRouter.put('/reset', passwordResetController);
 
 
 // Export router for use in main application
