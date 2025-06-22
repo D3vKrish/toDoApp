@@ -1,6 +1,5 @@
 # Backend Module
 
-
 ## What is a Backend?
 
 A backend (or "server-side") application handles tasks like:
@@ -8,8 +7,6 @@ A backend (or "server-side") application handles tasks like:
 - User authentication and authorization
 - Business logic processing
 - API endpoints that client applications can communicate with
-
-
 
 ## Features
 
@@ -46,7 +43,7 @@ If you're new to Node.js development, follow these steps(If you have installed f
 npm install
 ```
 
-3. Environment Configuration
+3. Environment Configuration  
 Create a `.env` file in the root directory with the following variables:
 ```
 PORT=3000                                     # The port your server will run on
@@ -84,13 +81,9 @@ This will start the server using nodemon, which automatically restarts the serve
 ### Key Files Explained
 
 - **index.js**: The starting point of the application. It loads environment variables, connects to the database, and starts the server.
-
 - **app.js**: Creates and configures the Express application, setting up middleware for parsing requests.
-
 - **routes/auth.route.js**: Defines the URLs for authentication operations and connects them to controller functions.
-
 - **controllers/login.controller.js**: Contains the logic for authenticating users, comparing passwords, and updating login state.
-
 - **models/User.js**: Defines the structure of user data in the database using Mongoose schema.
 
 ## Understanding HTTP Methods
@@ -146,8 +139,6 @@ To run in development mode with nodemon (automatically restarts when code change
 ```bash
 npm run dev
 ```
-
-
 
 ## Core Assignment: Simple To-Do List
 
@@ -223,8 +214,6 @@ When you're done, your project structure should look like this:
 └── .env                     # Environment variables (not in repository)
 ```
 
-
-
 ## Core Assignment: Simple Expense Tracker
 
 ### Assignment Overview
@@ -277,7 +266,6 @@ Add your new expense routes to the main application by importing your expense ro
 
 When you're done, your project structure should look like this:
 
-
 ```
 /
 ├── index.js                 # Application entry point - starts the server
@@ -299,7 +287,3 @@ When you're done, your project structure should look like this:
 │       └── connectDB.js     # Database connection - connects to MongoDB
 └── .env                     # Environment variables (not in repository)
 ```
-
-#   t o D o A p p 
- 
- 
