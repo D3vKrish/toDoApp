@@ -4,7 +4,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Http {
   static const String baseUrl = "https://todoapp-krfv.onrender.com/api/user";
-  //Creating secure storage instance
   static final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   static Future<Map<String, dynamic>> loginUser(String userId, String password) async {

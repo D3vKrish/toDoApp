@@ -90,181 +90,180 @@ class _ListPageState extends State<ListPage> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : tasks.isEmpty
-              ? const Center(
-                  child: Text(
-                    "NO ITEMS YET",
-                    style: TextStyle(fontSize: 18),
+          ? const Center(
+        child: Text(
+          "NO ITEMS YET",
+          style: TextStyle(fontSize: 18),
+        ),
+      )
+          : ListView.builder(
+        itemCount: tasks.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 10, vertical: 6),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        EditPage(task: tasks[index].toJson()),
                   ),
-                )
-              : ListView.builder(
-                  itemCount: tasks.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 6),
-                      child: GestureDetector(
-                        onTap: () {
+                ).then((_) => _loadTasks());
+              },
+              child: Container(
+                height: 80,
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade100,
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: Colors.black, width: 1),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Checkbox(
+                        value: tasks[index].status,
+                        onChanged: (value) async {
+                          setState(() {
+                            tasks[index].status = value!;
+                          });
+
+                          try {
+                            final data = {
+                              "taskId": tasks[index].id,
+                              "userId": tasks[index].userId,
+                              "title": tasks[index].title,
+                              "description": tasks[index].description,
+                              "ddate": tasks[index]
+                                  .ddate
+                                  .toIso8601String(),
+                              "status": value,
+                            };
+
+                            final response =
+                            await Update.updateTask(data);
+
+                            if (response != null &&
+                                response.statusCode == 200) {
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      'Failed to update task status'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      'Error updating status: $e')),
+                            );
+                          }
+                        },
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment:
+                          CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              tasks[index].title,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              "Date created: ${DateFormat('dd-MM-yyyy').format(tasks[index].createdAt)}",
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      ),
+                      //Delete button
+                      IconButton(
+                        icon: const Icon(Icons.delete,
+                            color: Colors.red),
+                        onPressed: () async {
+                          try {
+                            final String taskId = tasks[index].id;
+                            final response =
+                            await Delete.deleteTask(taskId);
+                            if (response != null &&
+                                response.statusCode == 200) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Task deleted successfully!')),
+                              );
+                              await _loadTasks();
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      'Failed: ${response.body}'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(
+                              SnackBar(content: Text('Error: $e')),
+                            );
+                          }
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.edit,
+                            color: Colors.black87),
+                        onPressed: () async {
+                          _showLoadingDialog();
+                          final valid =
+                          await AuthService.isTokenValid();
+                          Navigator.pop(context);
+
+                          if (!valid) {
+                            Navigator.pushReplacementNamed(
+                                context, '/login');
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(
+                              SnackBar(
+                                content:
+                                Text('User session timed out'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  EditPage(task: tasks[index].toJson()),
+                              builder: (context) => EditPage(
+                                  task: tasks[index].toJson()),
                             ),
                           ).then((_) => _loadTasks());
                         },
-                        child: Container(
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: Colors.blue.shade100,
-                            borderRadius: BorderRadius.circular(15),
-                            border: Border.all(color: Colors.black, width: 1),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Checkbox(
-                                  value: tasks[index].status,
-                                  onChanged: (value) async {
-                                    setState(() {
-                                      tasks[index].status = value!;
-                                      print(tasks[index].status);
-                                    });
-
-                                    try {
-                                      final data = {
-                                        "taskId": tasks[index].id,
-                                        "userId": tasks[index].userId,
-                                        "title": tasks[index].title,
-                                        "description": tasks[index].description,
-                                        "ddate": tasks[index]
-                                            .ddate
-                                            .toIso8601String(),
-                                        "status": value,
-                                      };
-
-                                      final response =
-                                          await Update.updateTask(data);
-
-                                      if (response != null &&
-                                          response.statusCode == 200) {
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                                'Failed to update task status'),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                      }
-                                    } catch (e) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                            content: Text(
-                                                'Error updating status: $e')),
-                                      );
-                                    }
-                                  },
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        tasks[index].title,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 5),
-                                      Text(
-                                        "Date created: ${DateFormat('dd-MM-yyyy').format(tasks[index].createdAt)}",
-                                        style: const TextStyle(fontSize: 14),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                //Delete button
-                                IconButton(
-                                  icon: const Icon(Icons.delete,
-                                      color: Colors.red),
-                                  onPressed: () async {
-                                    try {
-                                      final String taskId = tasks[index].id;
-                                      final response =
-                                          await Delete.deleteTask(taskId);
-                                      if (response != null &&
-                                          response.statusCode == 200) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text(
-                                                  'Task deleted successfully!')),
-                                        );
-                                        await _loadTasks();
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                                'Failed: ${response.body}'),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                      }
-                                    } catch (e) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(content: Text('Error: $e')),
-                                      );
-                                    }
-                                  },
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.edit,
-                                      color: Colors.black87),
-                                  onPressed: () async {
-                                    _showLoadingDialog();
-                                    final valid =
-                                        await AuthService.isTokenValid();
-                                    Navigator.pop(context);
-
-                                    if (!valid) {
-                                      Navigator.pushReplacementNamed(
-                                          context, '/login');
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content:
-                                              Text('User session timed out'),
-                                          backgroundColor: Colors.red,
-                                        ),
-                                      );
-                                      return;
-                                    }
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => EditPage(
-                                            task: tasks[index].toJson()),
-                                      ),
-                                    ).then((_) => _loadTasks());
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
                       ),
-                    );
-                  },
+                    ],
+                  ),
                 ),
+              ),
+            ),
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green.shade200,
         onPressed: () async {

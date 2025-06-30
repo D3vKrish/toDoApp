@@ -161,7 +161,6 @@ class _NewPageState extends State<NewPage> {
                         );
                       }
                     } catch (e) {
-                      print("Exception: $e");
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Error: $e')),
                       );

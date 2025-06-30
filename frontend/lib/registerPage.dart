@@ -17,6 +17,14 @@ class _RegisterPageState extends State<RegisterPage> {
   String password = "", confirm = "";
 
   @override
+  void dispose() {
+    userId.dispose();
+    pass.dispose();
+    repass.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

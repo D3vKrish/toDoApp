@@ -14,7 +14,6 @@ class Reset {
         },
         body: jsonEncode(uData),
       );
-      print(res.body);
       return res;
     } catch (e) {
       return null;

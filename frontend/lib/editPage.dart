@@ -69,6 +69,7 @@ class _EditPageState extends State<EditPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            //Task Title
             const Text(
               'What is to be done?',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),

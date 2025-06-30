@@ -10,13 +10,20 @@ class PasswordReset extends StatefulWidget {
 }
 
 class _PasswordResetState extends State<PasswordReset> {
-  final TextEditingController userIdController = TextEditingController();
-  final TextEditingController newPasswordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController user = TextEditingController();
+  final TextEditingController nPass = TextEditingController();
+  final TextEditingController conPass = TextEditingController();
 
-  bool showOldPassword = true;
   bool showNewPassword = true;
   bool showConfirmPassword = true;
+
+  @override
+  void dispose() {
+    user.dispose();
+    nPass.dispose();
+    conPass.dispose();
+    super.dispose();
+  }
 
   Widget buildField({
     required String label,
@@ -70,11 +77,11 @@ class _PasswordResetState extends State<PasswordReset> {
             ),
             const SizedBox(height: 40),
 
-            buildField(label: 'Username', controller: userIdController),
+            buildField(label: 'Username', controller: user),
 
             buildField(
               label: 'New Password',
-              controller: newPasswordController,
+              controller: nPass,
               obscure: showNewPassword,
               showToggle: true,
               toggleVisibility: () {
@@ -86,7 +93,7 @@ class _PasswordResetState extends State<PasswordReset> {
 
             buildField(
               label: 'Confirm Password',
-              controller: confirmPasswordController,
+              controller: conPass,
               obscure: showConfirmPassword,
               showToggle: true,
               toggleVisibility: () {
@@ -101,9 +108,9 @@ class _PasswordResetState extends State<PasswordReset> {
                 width: 200,
                 child: ElevatedButton(
                   onPressed : () async {
-                    final userId = userIdController.text.trim();
-                    final newPassword = newPasswordController.text.trim();
-                    final confirmPassword = confirmPasswordController.text.trim();
+                    final userId = user.text.trim();
+                    final newPassword = nPass.text.trim();
+                    final confirmPassword = conPass.text.trim();
 
                     if (userId.isEmpty || newPassword.isEmpty || confirmPassword.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(

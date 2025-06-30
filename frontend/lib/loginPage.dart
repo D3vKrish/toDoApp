@@ -15,6 +15,13 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController password = TextEditingController();
 
   @override
+  void dispose() {
+    userId.dispose();
+    password.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
