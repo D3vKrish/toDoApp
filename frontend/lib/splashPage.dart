@@ -19,7 +19,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> _checkToken() async {
-    await Future.delayed(const Duration(milliseconds: 100)); // optional for smoother transition
+    await Future.delayed(const Duration(milliseconds: 100));
 
     String? token = await storage.read(key: 'jwtToken');
 
